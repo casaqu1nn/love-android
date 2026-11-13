@@ -26,11 +26,19 @@ jobs:
         java-version: 17
         cache: gradle
     - name: Build Normal Flavor
+          - name: Build Embedded Game APK
+        run: bash ./gradlew assembleEmbedNoRecord${{ matrix.build_type }}
       run: bash ./gradlew assembleNormalRecord${{ matrix.build_type }}
     - name: Build Release-specific Binaries
       if: ${{ matrix.build_type == 'Release' }}
       run: bash ./gradlew bundleNormalNoRecordRelease bundleEmbedRecordRelease bundleEmbedNoRecordRelease
     - name: Artifact (Normal debug APK)
+          - name: Artifact (Cube Clicker APK)
+        if: ${{ matrix.build_type == 'Debug' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Cube-Clicker-APK
+          path: app/build/outputs/apk/embedNoRecord/debug/app-embed-noRecord-debug.apk
       if: ${{ matrix.build_type == 'Debug' }}
       uses: actions/upload-artifact@v4
       with:
